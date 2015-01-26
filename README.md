@@ -12,18 +12,18 @@ and reboot.
 
 Then load up in AppleUSBCDC.xcodeproj in Xcode and build. Expand Products in the file navigator and right click to show in finder. open a terminal at that location:
 ```
-sudo cp -R AppleUSBCDCData.kext /tmp/
-sudo kextutil -t /tmp/AppleUSBCDCData.kext
+sudo cp -R AppleUSBCDCACMData.kext /tmp/
+sudo kextutil -t /tmp/AppleUSBCDCACMData.kext
 ```
 if you need to unload it for some reason
 ```
-sudo kextunload -vt /tmp/AppleUSBCDCData.kext
+sudo kextunload /tmp/AppleUSBCDCACMData.kext
 ```
 
 If you want to make it permanent. (careful with this, if you install a bad driver permanently it’ll be a real pain to fix)
 ```
-sudo cp -R AppleUSBCDCData.kext /System/Library/Extensions/
-sudo chown root:wheel /System/Library/Extensions/AppleUSBCDCData.kext
+sudo cp -R AppleUSBCDCACMData.kext /System/Library/Extensions/
+sudo chown root:wheel /System/Library/Extensions/AppleUSBCDCACMData.kext
 ```
 
 ##info
