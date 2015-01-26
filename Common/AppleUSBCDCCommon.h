@@ -25,7 +25,7 @@
 #ifndef __APPLEUSBCDCCOMMON__
 #define __APPLEUSBCDCCOMMON__
 
-#define VersionNumber   "4.2.1b5"
+#define VersionNumber   "1.0.0b0"
 
     // USB CDC Common Defintions
 		
@@ -501,7 +501,7 @@ extern "C"
 #include <sys/systm.h>
 #include <sys/malloc.h>
 #include <sys/syslog.h>
-#include <sys/fslog.h>
+#include "fslog.h"
 #include <IOKit/IOLib.h>
     extern void cdc_LogToMessageTracer(const char *domain, const char *signature, const char *signature2, const char *signature3, u_int64_t optValue, int optSucceeded);
     

@@ -29,10 +29,10 @@
 
     // Common Defintions
 
-#define LDEBUG		0			// for debugging
+#define LDEBUG		1			// for debugging
 #if LDEBUG
 #define USE_ELG		0			// to Event LoG (via kprintf) - LDEBUG must also be set
-#define USE_IOL		0			// to IOLog - LDEBUG must also be set
+#define USE_IOL		1			// to IOLog - LDEBUG must also be set
 #define USE_XTRACE	0			// use xtrace kext
 #define	LOG_DATA	0			// logs data to the appropriate log - LDEBUG must also be set
 #define DUMPALL		0			// Dumps all the data to the log - LOG_DATA must also be set
@@ -50,8 +50,8 @@
         #define XTRACEP(ID,A,B,STRING) {Log("%8x %p %p " DEBUG_NAME ": " STRING "\n",(uintptr_t)(ID),(void *)(A),(void *)(B));}
 #else /* not USE_ELG */
     #if USE_IOL
-        #define XTRACE(ID,A,B,STRING) {Log("%8x %8x %8x " DEBUG_NAME ": " STRING "\n",(unsigned int)(ID),(unsigned int)(A),(unsigned int)(B)); IOSleep(kSleepTime);}
-        #define XTRACEP(ID,A,B,STRING) {Log("%8x %p %p " DEBUG_NAME ": " STRING "\n",(unsigned int)(ID),(void *)(A),(void *)(B)); IOSleep(kSleepTime);}
+        #define XTRACE(ID,A,B,STRING) {Log("%8x %8x %8x " DEBUG_NAME ": " STRING "\n",(uintptr_t)(ID),(unsigned int)(A),(unsigned int)(B));}
+        #define XTRACEP(ID,A,B,STRING) {Log("%8x %p %p " DEBUG_NAME ": " STRING "\n",(uintptr_t)(ID),(void *)(A),(void *)(B));}
 #else
     #if USE_XTRACE
         #include <XTrace/XTrace.h>

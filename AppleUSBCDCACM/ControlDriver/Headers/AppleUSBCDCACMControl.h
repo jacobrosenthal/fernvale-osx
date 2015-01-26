@@ -41,18 +41,18 @@ enum
     kNumCDCStates	= 2
 };
 
-class AppleUSBCDCACMData;
+class AppleUSBCDCACMData2;
 
 	/* AppleUSBCDCACMControl.h - This file contains the class definition for the		*/
 	/* USB Communication Device Class (CDC) ACM Control driver. 				*/
 
-class AppleUSBCDCACMControl : public IOService
+class AppleUSBCDCACMControl2 : public IOService
 {
-    OSDeclareDefaultStructors(AppleUSBCDCACMControl);			// Constructor & Destructor stuff
+    OSDeclareDefaultStructors(AppleUSBCDCACMControl2);			// Constructor & Destructor stuff
 
 private:
 	AppleUSBCDC				*fCDCDriver;		// The CDC driver
-    AppleUSBCDCACMData		*fDataDriver;       // Our Data Driver
+    AppleUSBCDCACMData2		*fDataDriver;       // Our Data Driver
     bool			fdataAcquired;				// Has the data port been acquired
     UInt8			fSessions;				// Active sessions (across all ports)
     bool			fTerminate;				// Are we being terminated (ie the device was unplugged)
@@ -98,7 +98,7 @@ public:
     void			releaseResources(void);
     bool			WakeonRing(void);
     void                        resetDevice(void);
-    virtual bool		checkInterfaceNumber(AppleUSBCDCACMData *dataDriver);
+    virtual bool		checkInterfaceNumber(AppleUSBCDCACMData2 *dataDriver);
     
         // Power Manager Methods
         

@@ -22,9 +22,9 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
-#define LDEBUG		0			// for debugging
+#define LDEBUG		1			// for debugging
 #define USE_ELG		0			// to Event LoG (via kprintf and Firewire) - LDEBUG must also be set
-#define USE_IOL		0			// to IOLog - LDEBUG must also be set
+#define USE_IOL		1			// to IOLog - LDEBUG must also be set
 
 #define Sleep_Time	20
 

@@ -10,7 +10,7 @@
 #include <sys/malloc.h>
 #include <sys/syslog.h>
 #include <sys/kernel.h>
-#include <sys/fslog.h>
+#include "fslog.h"
 #include <IOKit/IOLib.h>
 
 

@@ -22,7 +22,7 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
-    /* AppleUSBCDCACMControl.cpp - MacOSX implementation of			*/
+    /* AppleUSBCDCACMControl2.cpp - MacOSX implementation of			*/
     /* USB Communication Device Class (CDC) Driver, ACM Control Interface.	*/
 
 #include <machine/limits.h>			/* UINT_MAX */
@@ -54,7 +54,7 @@
 
 #include <UserNotification/KUNCUserNotifications.h>
 
-#define DEBUG_NAME "AppleUSBCDCACMControl"
+#define DEBUG_NAME "AppleUSBCDCACMControl2"
 
 #include "AppleUSBCDCACM.h"
 #include "AppleUSBCDCACMControl.h"
@@ -73,7 +73,7 @@ static IOPMPowerState gOurPowerStates[kNumCDCStates] =
 
 #define super IOService
 
-OSDefineMetaClassAndStructors(AppleUSBCDCACMControl, IOService);
+OSDefineMetaClassAndStructors(AppleUSBCDCACMControl2, IOService);
 
 /****************************************************************************************************/
 //
@@ -89,7 +89,7 @@ OSDefineMetaClassAndStructors(AppleUSBCDCACMControl, IOService);
 
 AppleUSBCDC *findCDCDriverAC(void *controlAddr, IOReturn *retCode)
 {
-    AppleUSBCDCACMControl	*me = (AppleUSBCDCACMControl *)controlAddr;
+    AppleUSBCDCACMControl2	*me = (AppleUSBCDCACMControl2 *)controlAddr;
     AppleUSBCDC		*CDCDriver = NULL;
     bool		driverOK = false;
     OSIterator		*iterator = NULL;
@@ -183,7 +183,7 @@ static UInt32 sMapModemStates[16] =
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::commReadComplete
+//		Method:		AppleUSBCDCACMControl2::commReadComplete
 //
 //		Inputs:		obj - me
 //				rc - return code
@@ -195,9 +195,9 @@ static UInt32 sMapModemStates[16] =
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCACMControl::commReadComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
+void AppleUSBCDCACMControl2::commReadComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
 {
-    AppleUSBCDCACMControl	*me = (AppleUSBCDCACMControl*)obj;
+    AppleUSBCDCACMControl2	*me = (AppleUSBCDCACMControl2*)obj;
     IOReturn			ior;
     UInt32			dLen;
     UInt16			*tState;
@@ -285,7 +285,7 @@ void AppleUSBCDCACMControl::commReadComplete(void *obj, void *param, IOReturn rc
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::merWriteComplete
+//		Method:		AppleUSBCDCACMControl2::merWriteComplete
 //
 //		Inputs:		obj - me
 //				param - MER 
@@ -298,9 +298,9 @@ void AppleUSBCDCACMControl::commReadComplete(void *obj, void *param, IOReturn rc
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCACMControl::merWriteComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
+void AppleUSBCDCACMControl2::merWriteComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
 {
-    AppleUSBCDCACMControl	*me = (AppleUSBCDCACMControl *)obj;
+    AppleUSBCDCACMControl2	*me = (AppleUSBCDCACMControl2 *)obj;
     IOUSBDevRequest		*MER = (IOUSBDevRequest *)param;
     UInt16			dataLen;
     
@@ -358,7 +358,7 @@ void AppleUSBCDCACMControl::merWriteComplete(void *obj, void *param, IOReturn rc
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::probe
+//		Method:		AppleUSBCDCACMControl2::probe
 //
 //		Inputs:		provider - my provider
 //
@@ -368,7 +368,7 @@ void AppleUSBCDCACMControl::merWriteComplete(void *obj, void *param, IOReturn rc
 //
 /****************************************************************************************************/
 
-IOService* AppleUSBCDCACMControl::probe( IOService *provider, SInt32 *score )
+IOService* AppleUSBCDCACMControl2::probe( IOService *provider, SInt32 *score )
 { 
     IOService   *res;
 	
@@ -390,7 +390,7 @@ IOService* AppleUSBCDCACMControl::probe( IOService *provider, SInt32 *score )
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::start
+//		Method:		AppleUSBCDCACMControl2::start
 //
 //		Inputs:		provider - my provider
 //
@@ -401,8 +401,11 @@ IOService* AppleUSBCDCACMControl::probe( IOService *provider, SInt32 *score )
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCACMControl::start(IOService *provider)
+bool AppleUSBCDCACMControl2::start(IOService *provider)
 {
+    
+    IOLog("AppleUSBCDCACMControl2 Starting\n");
+
 	IOReturn	rtn;
 	UInt16		devDriverCount = 0;
 
@@ -499,7 +502,7 @@ bool AppleUSBCDCACMControl::start(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::stop
+//		Method:		AppleUSBCDCACMControl2::stop
 //
 //		Inputs:		provider - my provider
 //
@@ -509,9 +512,11 @@ bool AppleUSBCDCACMControl::start(IOService *provider)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCACMControl::stop(IOService *provider)
+void AppleUSBCDCACMControl2::stop(IOService *provider)
 {
     
+    IOLog("AppleUSBCDCACMControl2 Stopping\n");
+
     XTRACE(this, 0, 0, "stop");
     
     fStopping = true;
@@ -531,7 +536,7 @@ void AppleUSBCDCACMControl::stop(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::configureACM
+//		Method:		AppleUSBCDCACMControl2::configureACM
 //
 //		Inputs:		
 //
@@ -541,7 +546,7 @@ void AppleUSBCDCACMControl::stop(IOService *provider)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCACMControl::configureACM()
+bool AppleUSBCDCACMControl2::configureACM()
 {
     UInt8	protocol;
     
@@ -569,7 +574,7 @@ bool AppleUSBCDCACMControl::configureACM()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::getFunctionalDescriptors
+//		Method:		AppleUSBCDCACMControl2::getFunctionalDescriptors
 //
 //		Inputs:		
 //
@@ -579,7 +584,7 @@ bool AppleUSBCDCACMControl::configureACM()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCACMControl::getFunctionalDescriptors()
+bool AppleUSBCDCACMControl2::getFunctionalDescriptors()
 {
     bool				gotDescriptors = false;
     UInt16				vers;
@@ -727,7 +732,7 @@ bool AppleUSBCDCACMControl::getFunctionalDescriptors()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::dataAcquired
+//		Method:		AppleUSBCDCACMControl2::dataAcquired
 //
 //		Inputs:		None
 //
@@ -737,7 +742,7 @@ bool AppleUSBCDCACMControl::getFunctionalDescriptors()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCACMControl::dataAcquired()
+bool AppleUSBCDCACMControl2::dataAcquired()
 {
     IOReturn 	rtn = kIOReturnSuccess; 
     
@@ -770,7 +775,7 @@ bool AppleUSBCDCACMControl::dataAcquired()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::dataReleased
+//		Method:		AppleUSBCDCACMControl2::dataReleased
 //
 //		Inputs:		None
 //
@@ -780,7 +785,7 @@ bool AppleUSBCDCACMControl::dataAcquired()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCACMControl::dataReleased()
+void AppleUSBCDCACMControl2::dataReleased()
 {
     
     XTRACE(this, 0, 0, "dataReleased");
@@ -795,7 +800,7 @@ void AppleUSBCDCACMControl::dataReleased()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::USBSendSetLineCoding
+//		Method:		AppleUSBCDCACMControl2::USBSendSetLineCoding
 //
 //		Inputs:		The line coding parameters
 //
@@ -805,7 +810,7 @@ void AppleUSBCDCACMControl::dataReleased()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCACMControl::USBSendSetLineCoding(UInt32 BaudRate, UInt8 StopBits, UInt8 TX_Parity, UInt8 CharLength)
+void AppleUSBCDCACMControl2::USBSendSetLineCoding(UInt32 BaudRate, UInt8 StopBits, UInt8 TX_Parity, UInt8 CharLength)
 {
     LineCoding		*lineParms;
     UInt16		lcLen = sizeof(LineCoding)-1;
@@ -874,7 +879,7 @@ void AppleUSBCDCACMControl::USBSendSetLineCoding(UInt32 BaudRate, UInt8 StopBits
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::USBSendSetControlLineState
+//		Method:		AppleUSBCDCACMControl2::USBSendSetControlLineState
 //
 //		Inputs:		RTS - true(set RTS), false(clear RTS)
 //				DTR - true(set DTR), false(clear DTR)
@@ -885,7 +890,7 @@ void AppleUSBCDCACMControl::USBSendSetLineCoding(UInt32 BaudRate, UInt8 StopBits
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCACMControl::USBSendSetControlLineState(bool RTS, bool DTR)
+void AppleUSBCDCACMControl2::USBSendSetControlLineState(bool RTS, bool DTR)
 {
     IOReturn		rc;
     IOUSBDevRequest	*MER;
@@ -941,7 +946,7 @@ void AppleUSBCDCACMControl::USBSendSetControlLineState(bool RTS, bool DTR)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::USBSendBreak
+//		Method:		AppleUSBCDCACMControl2::USBSendBreak
 //
 //		Inputs:		sBreak - true(set Break), false(clear Break)
 //
@@ -951,7 +956,7 @@ void AppleUSBCDCACMControl::USBSendSetControlLineState(bool RTS, bool DTR)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCACMControl::USBSendBreak(bool sBreak)
+void AppleUSBCDCACMControl2::USBSendBreak(bool sBreak)
 {
     IOReturn		rc;
     IOUSBDevRequest	*MER;
@@ -1007,7 +1012,7 @@ void AppleUSBCDCACMControl::USBSendBreak(bool sBreak)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::checkPipe
+//		Method:		AppleUSBCDCACMControl2::checkPipe
 //
 //		Inputs:		thePipe - the pipe
 //				devReq - true(send CLEAR_FEATURE), false(only if status returns stalled)
@@ -1020,7 +1025,7 @@ void AppleUSBCDCACMControl::USBSendBreak(bool sBreak)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCACMControl::checkPipe(IOUSBPipe *thePipe, bool devReq)
+IOReturn AppleUSBCDCACMControl2::checkPipe(IOUSBPipe *thePipe, bool devReq)
 {
     IOReturn 	rtn = kIOReturnSuccess;
     
@@ -1050,7 +1055,7 @@ IOReturn AppleUSBCDCACMControl::checkPipe(IOUSBPipe *thePipe, bool devReq)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::allocateResources
+//		Method:		AppleUSBCDCACMControl2::allocateResources
 //
 //		Inputs:		
 //
@@ -1060,7 +1065,7 @@ IOReturn AppleUSBCDCACMControl::checkPipe(IOUSBPipe *thePipe, bool devReq)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCACMControl::allocateResources()
+bool AppleUSBCDCACMControl2::allocateResources()
 {
     IOUSBFindEndpointRequest	epReq;
 
@@ -1103,7 +1108,7 @@ bool AppleUSBCDCACMControl::allocateResources()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::releaseResources
+//		Method:		AppleUSBCDCACMControl2::releaseResources
 //
 //		Inputs:		
 //
@@ -1113,7 +1118,7 @@ bool AppleUSBCDCACMControl::allocateResources()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCACMControl::releaseResources()
+void AppleUSBCDCACMControl2::releaseResources()
 {
     XTRACE(this, 0, 0, "releaseResources");
 	
@@ -1134,7 +1139,7 @@ void AppleUSBCDCACMControl::releaseResources()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::checkInterfaceNumber
+//		Method:		AppleUSBCDCACMControl2::checkInterfaceNumber
 //
 //		Inputs:		dataDriver - the data driver enquiring
 //
@@ -1145,7 +1150,7 @@ void AppleUSBCDCACMControl::releaseResources()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCACMControl::checkInterfaceNumber(AppleUSBCDCACMData *dataDriver)
+bool AppleUSBCDCACMControl2::checkInterfaceNumber(AppleUSBCDCACMData2 *dataDriver)
 {
     IOUSBInterface	*dataInterface;
 
@@ -1183,7 +1188,7 @@ bool AppleUSBCDCACMControl::checkInterfaceNumber(AppleUSBCDCACMData *dataDriver)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::resetDevice
+//		Method:		AppleUSBCDCACMControl2::resetDevice
 //
 //		Inputs:		
 //
@@ -1193,7 +1198,7 @@ bool AppleUSBCDCACMControl::checkInterfaceNumber(AppleUSBCDCACMData *dataDriver)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCACMControl::resetDevice(void)
+void AppleUSBCDCACMControl2::resetDevice(void)
 {
     IOReturn 	rtn = kIOReturnSuccess;
     USBStatus	status;
@@ -1267,7 +1272,7 @@ void AppleUSBCDCACMControl::resetDevice(void)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::message
+//		Method:		AppleUSBCDCACMControl2::message
 //
 //		Inputs:		type - message type
 //				provider - my provider
@@ -1279,7 +1284,7 @@ void AppleUSBCDCACMControl::resetDevice(void)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCACMControl::message(UInt32 type, IOService *provider, void *argument)
+IOReturn AppleUSBCDCACMControl2::message(UInt32 type, IOService *provider, void *argument)
 {	
 	IOReturn	rtn;
     
@@ -1347,7 +1352,7 @@ IOReturn AppleUSBCDCACMControl::message(UInt32 type, IOService *provider, void *
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::initForPM
+//		Method:		AppleUSBCDCACMControl2::initForPM
 //
 //		Inputs:		provider - my provider
 //
@@ -1358,7 +1363,7 @@ IOReturn AppleUSBCDCACMControl::message(UInt32 type, IOService *provider, void *
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCACMControl::initForPM(IOService *provider)
+bool AppleUSBCDCACMControl2::initForPM(IOService *provider)
 {
     XTRACE(this, 0, 0, "initForPM");
     
@@ -1382,7 +1387,7 @@ bool AppleUSBCDCACMControl::initForPM(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::initialPowerStateForDomainState
+//		Method:		AppleUSBCDCACMControl2::initialPowerStateForDomainState
 //
 //		Inputs:		flags - 
 //
@@ -1392,7 +1397,7 @@ bool AppleUSBCDCACMControl::initForPM(IOService *provider)
 //
 /****************************************************************************************************/
 
-unsigned long AppleUSBCDCACMControl::initialPowerStateForDomainState(IOPMPowerFlags flags)
+unsigned long AppleUSBCDCACMControl2::initialPowerStateForDomainState(IOPMPowerFlags flags)
 {
 
     XTRACE(this, 0, flags, "initialPowerStateForDomainState");
@@ -1403,7 +1408,7 @@ unsigned long AppleUSBCDCACMControl::initialPowerStateForDomainState(IOPMPowerFl
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCACMControl::setPowerState
+//		Method:		AppleUSBCDCACMControl2::setPowerState
 //
 //		Inputs:		powerStateOrdinal - on/off
 //
@@ -1413,7 +1418,7 @@ unsigned long AppleUSBCDCACMControl::initialPowerStateForDomainState(IOPMPowerFl
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCACMControl::setPowerState(unsigned long powerStateOrdinal, IOService *whatDevice)
+IOReturn AppleUSBCDCACMControl2::setPowerState(unsigned long powerStateOrdinal, IOService *whatDevice)
 {
 
     XTRACE(this, 0, powerStateOrdinal, "setPowerState");

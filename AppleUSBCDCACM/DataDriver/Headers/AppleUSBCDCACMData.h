@@ -210,18 +210,18 @@ typedef struct
 } PortInfo_t;
 
 class AppleUSBCDC;
-class AppleUSBCDCACMControl;
+class AppleUSBCDCACMControl2;
 
 	/* AppleUSBCDCACMData.h - This file contains the class definition for the		*/
 	/* USB Communication Device Class (CDC) Data Interface driver - ACM only at the moment.	*/
 
-class AppleUSBCDCACMData : public IOSerialDriverSync
+class AppleUSBCDCACMData2 : public IOSerialDriverSync
 {
-    OSDeclareDefaultStructors(AppleUSBCDCACMData);			// Constructor & Destructor stuff
+    OSDeclareDefaultStructors(AppleUSBCDCACMData2);			// Constructor & Destructor stuff
 
 private:
 	AppleUSBCDC		*fCDCDriver;			// The CDC driver
-	AppleUSBCDCACMControl   *fControlDriver;			// Our Control Driver
+	AppleUSBCDCACMControl2   *fControlDriver;			// Our Control Driver
     UInt16			fSessions;				// Number of active sessions
     bool			fStopping;				// Are we being "stopped"
     UInt8			fProductName[productNameLength];	// Product String from the Device
@@ -291,7 +291,7 @@ public:
         // Static stubs for IOCommandGate::runAction
         
 	static IOReturn			waitForBSDClienAction(OSObject *owner, void *, void *, void *, void *);
-    static bool				bsdClientPublished(AppleUSBCDCACMData *target, void *ref, IOService *newService,IONotifier * notifier);
+    static bool				bsdClientPublished(AppleUSBCDCACMData2 *target, void *ref, IOService *newService,IONotifier * notifier);
     static	IOReturn	stopAction(OSObject *owner, void *, void *, void *, void *);
     static	IOReturn	acquirePortAction(OSObject *owner, void *arg0, void *, void *, void *);
     static	IOReturn	releasePortAction(OSObject *owner, void *, void *, void *, void *);
@@ -361,14 +361,14 @@ private:
     
 }; /* end class AppleUSBCDCACMData */
 
-class AppleUSBCDCACMData;
+class AppleUSBCDCACMData2;
 
-class AppleUSBCDCACMDataUserClient : public IOUserClient
+class AppleUSBCDCACMDataUserClient2 : public IOUserClient
 {
-    OSDeclareDefaultStructors(AppleUSBCDCACMDataUserClient);
+    OSDeclareDefaultStructors(AppleUSBCDCACMDataUserClient2);
 
 private:
-    AppleUSBCDCACMData	*fProvider;
+    AppleUSBCDCACMData2	*fProvider;
     IOExternalMethod	fMethods[1];		// just one method
     task_t		fTask;
 
